@@ -2,6 +2,7 @@
 @import 'reset';
 @import 'media';
 @import 'navbar';
+@import 'dashboard';
 
 body {
 	width: 100%;
@@ -9,9 +10,10 @@ body {
 
 .wrapper {
 	width: 100%;
-	display: inline-flex;
+	display: flex;
+	align-items: stretch !important;
 
-	main {
+	/*main {
 		height: 100vh;
-	}
+	}*/
 }

@@ -1,0 +1,29 @@
+@import 'variables';
+
+.dashboard-layout {
+	.small-graph-container {
+
+		.card {
+			min-height: 200px;
+			max-height: 250px;
+			height: 100%;
+		}
+
+	}
+
+	.price-history-graph-container {
+		.card {
+			min-height: 300px;
+			max-height: 350px;
+			height: 100%;
+		}
+	}
+
+	.bills-history-graph-container {
+		.card {
+			min-height: 300px;
+			max-height: 350px;
+			height: 100%;
+		}
+	}
+}
