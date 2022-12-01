@@ -1,0 +1,17 @@
+@import 'variables';
+@import 'reset';
+@import 'media';
+@import 'navbar';
+
+body {
+	width: 100%;
+}
+
+.wrapper {
+	width: 100%;
+	display: inline-flex;
+
+	main {
+		height: 100vh;
+	}
+}
