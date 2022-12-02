@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<base href="http://localhost/php-billingapp/" />
 
 	<!-- @@@@@@@@@@@@@@@ STYLES @@@@@@@@@@@@@@@ -->
 
@@ -37,10 +38,10 @@
 		</a>
 		<ul class="collapse list-unstyled" id="mastersPageMenu">
 			<li>
-				<a href="#">Page 1</a>
+				<a href="http://localhost/php-billingapp/pages/productmaster/index.php">Products</a>
 			</li>
 			<li>
-				<a href="#">Page 1</a>
+				<a href="http://localhost/php-billingapp/pages/pricemaster/index.php">Price</a>
 			</li>
 		</ul>
 
@@ -75,6 +76,6 @@
 		 		<i class="bi bi-list"></i> Menu
 		 	</button>
 
-		 	<h3 class="navbar-brand text-warning">Billing App</h3>
+		 	<a href="./" class="h3 navbar-brand text-warning">Billing App</a>
 
 		 </nav>
