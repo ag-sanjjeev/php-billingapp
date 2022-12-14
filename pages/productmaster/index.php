@@ -19,21 +19,21 @@
 	
 	<div class="col-md">
 		
-		<table class="table table-responsive-sm">
+		<table class="table table-responsive-sm" id="productListTable">
 			<thead>
 				<th width="15%">S.No</th>
 				<th>Product Name</th>
 				<th width="10%">Action</th>
 			</thead>
 			<tbody>
-				<tr>
-					<td colspan="3" align="center">No Products</td>
-				</tr>
+				
 			</tbody>
 		</table>
 
 	</div>
 
 </div>
+
+<script type="text/javascript" src="pages/productmaster/productScript.js" defer></script>
 
 <?php /* Footer Layout */ require_once '../../layouts/footer.php'; /* Footer Layout */ ?>

@@ -1,6 +1,39 @@
 <?php 
 	$page = $page ?? null;
 	$productId = $productId ?? null;
+
+	$productName = '';
+
+	if ($page == 'update' && !empty($productId)) {
+		
+		require_once '../../configs/Db.php';
+		$db = new Db();
+		
+		try {
+			
+			$sql = "SELECT productName FROM products WHERE delete_status=:delete_status AND id=:id";
+			$prepare = $db->prepare($sql);
+				
+			$bindParams = array(
+				':delete_status' => false,
+				':id' => $productId
+			);
+
+			$result = $prepare->execute($bindParams);
+
+			if ($result) {
+				$productName = $prepare->fetchColumn();
+			} else {
+				header("Location: pages/productmaster/index.php");
+			}
+
+		} catch (PDOException $e) {
+			
+			header("Location: pages/productmaster/index.php");			
+
+		}		
+
+	}
 ?>
 
 <form method="post" id="productForm">
@@ -9,7 +42,7 @@
 		
 		<div class="col-md d-flex justify-content-between mx-3 my-2">
 			
-			<input type="text" name="productName" id="productName" class="form-control mx-3" placeholder="Enter Product Name" required autofocus />
+			<input type="text" name="productName" id="productName" class="form-control mx-3" value="<?php echo $productName; ?>" placeholder="Enter Product Name" required autofocus />
 
 			<?php if($page == 'create'): ?>
 
@@ -22,7 +55,7 @@
 			<input type="hidden" name="productId" id="productId" value="<?php echo $productId ?>">
 
 			<button type="button" class="btn btn-primary" id="updateBtn">
-				<i class="bi bi-plus-circle-fill"></i>
+				<i class="bi bi-arrow-up-square-fill"></i>
 			</button>
 
 			<?php endif; ?>
