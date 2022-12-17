@@ -45,7 +45,7 @@
 			</li>
 		</ul>
 
-		<a href="#" class="btn-link">
+		<a href="http://localhost/php-billingapp/pages/billentry/index.php" class="btn-link">
 			Entry
 			<i class="bi bi-link-45deg"></i>
 		</a>

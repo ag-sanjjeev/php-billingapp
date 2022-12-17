@@ -26,3 +26,23 @@ body {
 .select2-selection.select2-selection--single {
 	height: 100%;
 }
+	
+.mini-text-container {
+
+	font-size: 0.8em !important;
+	display: flex;
+	justify-content: flex-end;
+	overflow-x: auto !important;
+
+	.mini-text-input {
+		margin: 0 !important;
+		padding: 0 !important;
+		outline: none !important;		
+		font-style: italic !important;	
+		min-width: 50px !important;			
+		width: auto;
+		margin: 0 5px !important;
+
+	}
+
+}

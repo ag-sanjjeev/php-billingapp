@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * Bill
+ */
+class Bill
+{	
+
+	static $locale = 'IN_en';
+	static $currency = 'INR';
+	static $acc_Month = 'APR'; // Account year starting month
+	static $acc_Date = '01'; // Account year starting date
+
+	public static function tempBillNo()
+	{
+		$currentYear = date('Y');
+		$nextYear = date('y');
+		$currentMonth = strtoupper(Date('M'));
+		$timeString = self::$acc_Date . '-' . self::$acc_Month . '-' . $currentYear;
+				
+		$bytes = random_bytes(3);
+		$uniqueString = bin2hex($bytes);
+
+		$acc = strtotime($timeString);
+		$now = strtotime( Date('d-M-Y H:i:s') );
+
+		if ($acc <= $now) {
+			$nextYear += 1;
+		} else {
+			$nextYear -= 1;
+		}
+
+		$tempBillNo = 'temp-' . $currentYear . $nextYear . $currentMonth .'-' . $uniqueString;
+
+		$tempBillNo = strtoupper($tempBillNo);
+
+		return $tempBillNo;
+	}
+
+	public static function getCurrencySymbol() 
+	{	
+		$locale = self::$locale;
+		$currency = self::$currency;
+
+		$c = new NumberFormatter($locale . "@currency=$currency", NumberFormatter::CURRENCY);
+		return $c->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+	}
+
+	public static function billNo($date = '')
+	{
+		$db = new Db();
+		if (empty($date)) {
+			$date = Date('d-M-Y H:i:s');
+		}
+		
+		$dateTimestamp = strtotime($date);
+
+		if ($dateTimestamp > 0) {
+			
+			$currentMonth = date('M', $dateTimestamp);
+			$currentYear = date('Y', $dateTimestamp);
+			$nextYear = date('y', $dateTimestamp);
+			$timeString = self::$acc_Date . '-' . self::$acc_Month . '-' . $currentYear;
+
+			$acc = strtotime($timeString);
+			$now = $dateTimestamp;
+
+			if ($acc <= $now) {
+				$nextYear += 1;
+			} else {
+				$nextYear -= 1;
+			}
+
+			$billCount = 0;
+
+			$sql = "SELECT IFNULL(COUNT(*),0) AS billCount FROM billentry WHERE billDate=:billDate AND delete_status=:delete_status AND billStatus!=:billStatus";
+			try {
+				$billDate = date('Y-m-d', $dateTimestamp);
+				
+				$prepare = $db->prepare($sql);
+				$prepare->bindValue(':billDate', $billDate, PDO::PARAM_STR);
+				$prepare->bindValue(':delete_status', false, PDO::PARAM_BOOL);
+				$prepare->bindValue(':billStatus', 'unsaved', PDO::PARAM_STR);
+				$result = $prepare->execute();
+
+				if ($result) {
+					$billCount = $prepare->fetchColumn() ?? 0;
+					$billCount++;
+					$billCount = str_pad($billCount, 5, '0', STR_PAD_LEFT);
+				} else {
+					return null;
+				}
+
+			} catch (PDOException $e) {
+				return null;
+			}
+
+			$billNo = 'bill-' . $currentYear . $nextYear . $currentMonth .'-' . $billCount;
+
+			$billNo = strtoupper($billNo);
+
+			return $billNo;
+
+		} else {
+			return null;
+		}
+	}
+
+}
