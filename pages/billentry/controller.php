@@ -2,7 +2,8 @@
 	
 	require_once '../../configs/Db.php';
 	require_once '../../configs/Bill.php';
-	$currency = Bill::getCurrencySymbol();
+	$currency = Bill::getCurrencySymbol();	
+	$accountYear = Bill::getAccountYear();
 
 	$status = false; $error = ''; $data = ''; $response = array(); $bindParams = array();
 
@@ -444,7 +445,7 @@
 					$error .= "\nNet Total should not to be an empty";
 				}
 
-				if (empty($error)) {
+				if (empty($error)) {					
 
 					try {
 
@@ -454,15 +455,15 @@
 						$prepare = $db->prepare('START TRANSACTION;');
 						$prepare->execute();
 
-						$sql = "UPDATE billentry SET billNo=:newBillNo, billDate=:billDate, customerName=:customerName, subTotal=:subTotal, discount=:discount, grandTotal=:grandTotal, roundOff=:roundOff, netTotal=:netTotal, paymentMode=:paymentMode, paymentReference=:paymentReference, billStatus=:billStatus, description=:description WHERE billNo=:billNo AND billStatus=:oldBillStatus AND delete_status=:delete_status";
+						$sql = "UPDATE billentry SET billNo=:newBillNo, billDate=:billDate, customerName=:customerName, subTotal=:subTotal, discount=:discount, grandTotal=:grandTotal, roundOff=:roundOff, netTotal=:netTotal, paymentMode=:paymentMode, paymentReference=:paymentReference, billStatus=:billStatus, description=:description, accountYear=:accountYear WHERE billNo=:billNo AND billStatus=:oldBillStatus AND delete_status=:delete_status";
 					
-						$newBillNo = Bill::billNo($billDate);						
+						$newBillNo = Bill::billNo($billDate, $accountYear);						
 						
 						if (empty($newBillNo)) {
 							$status = false;
 							$error = 'Something went wrong';
 						} else {
-
+							
 							$prepare = $db->prepare($sql);
 							$prepare->bindValue(':newBillNo', $newBillNo, PDO::PARAM_STR);
 							$prepare->bindValue(':billDate', $billDate, PDO::PARAM_STR);
@@ -476,6 +477,7 @@
 							$prepare->bindValue(':paymentReference', $paymentReference, PDO::PARAM_STR);
 							$prepare->bindValue(':billStatus', 'billed', PDO::PARAM_STR);
 							$prepare->bindValue(':description', $description, PDO::PARAM_STR);
+							$prepare->bindValue(':accountYear', $accountYear, PDO::PARAM_STR);
 							$prepare->bindValue(':billNo', $billNo, PDO::PARAM_STR);
 							$prepare->bindValue(':oldBillStatus', 'unsaved', PDO::PARAM_STR);
 							$prepare->bindValue(':delete_status', false, PDO::PARAM_BOOL);
@@ -579,7 +581,7 @@
 					$error .= "\nNet Total should not to be an empty";
 				}
 
-				if (empty($error)) {
+				if (empty($error)) {					
 
 					try {
 
@@ -589,46 +591,36 @@
 						$prepare = $db->prepare('START TRANSACTION;');
 						$prepare->execute();
 
-						$sql = "UPDATE billentry SET billDate=:billDate, customerName=:customerName, subTotal=:subTotal, discount=:discount, grandTotal=:grandTotal, roundOff=:roundOff, netTotal=:netTotal, paymentMode=:paymentMode, paymentReference=:paymentReference, description=:description WHERE id=:id AND billNo=:billNo AND delete_status=:delete_status";
-					
-						$newBillNo = Bill::billNo($billDate);						
-						
-						if (empty($newBillNo)) {
-							$status = false;
-							$error = 'Something went wrong';
+						$sql = "UPDATE billentry SET billDate=:billDate, customerName=:customerName, subTotal=:subTotal, discount=:discount, grandTotal=:grandTotal, roundOff=:roundOff, netTotal=:netTotal, paymentMode=:paymentMode, paymentReference=:paymentReference, description=:description WHERE id=:id AND billNo=:billNo AND delete_status=:delete_status";						
+
+						$prepare = $db->prepare($sql);
+						$prepare->bindValue(':billDate', $billDate, PDO::PARAM_STR);
+						$prepare->bindValue(':customerName', $customerName, PDO::PARAM_STR);
+						$prepare->bindValue(':subTotal', $subTotal, PDO::PARAM_STR);
+						$prepare->bindValue(':discount', $discount, PDO::PARAM_STR);
+						$prepare->bindValue(':grandTotal', $grandTotal, PDO::PARAM_STR);
+						$prepare->bindValue(':roundOff', $roundOff, PDO::PARAM_STR);
+						$prepare->bindValue(':netTotal', $netTotal, PDO::PARAM_STR);
+						$prepare->bindValue(':paymentMode', $paymentMode, PDO::PARAM_STR);
+						$prepare->bindValue(':description', $description, PDO::PARAM_STR);
+						$prepare->bindValue(':paymentReference', $paymentReference, PDO::PARAM_STR);
+						$prepare->bindValue(':id', $id, PDO::PARAM_INT);
+						$prepare->bindValue(':billNo', $billNo, PDO::PARAM_STR);
+						$prepare->bindValue(':delete_status', false, PDO::PARAM_BOOL);
+						$result = $prepare->execute();
+
+						if ($result) {
+							$status = true;	
+
+							$prepare = $db->prepare('COMMIT;');
+							$prepare->execute();
 						} else {
+							$status = false;
+							$error = 'Bill is not created';
 
-							$prepare = $db->prepare($sql);
-							$prepare->bindValue(':billDate', $billDate, PDO::PARAM_STR);
-							$prepare->bindValue(':customerName', $customerName, PDO::PARAM_STR);
-							$prepare->bindValue(':subTotal', $subTotal, PDO::PARAM_STR);
-							$prepare->bindValue(':discount', $discount, PDO::PARAM_STR);
-							$prepare->bindValue(':grandTotal', $grandTotal, PDO::PARAM_STR);
-							$prepare->bindValue(':roundOff', $roundOff, PDO::PARAM_STR);
-							$prepare->bindValue(':netTotal', $netTotal, PDO::PARAM_STR);
-							$prepare->bindValue(':paymentMode', $paymentMode, PDO::PARAM_STR);
-							$prepare->bindValue(':description', $description, PDO::PARAM_STR);
-							$prepare->bindValue(':paymentReference', $paymentReference, PDO::PARAM_STR);
-							$prepare->bindValue(':id', $id, PDO::PARAM_INT);
-							$prepare->bindValue(':billNo', $billNo, PDO::PARAM_STR);
-							$prepare->bindValue(':delete_status', false, PDO::PARAM_BOOL);
-							$result = $prepare->execute();
-
-							if ($result) {
-								$status = true;	
-
-								$prepare = $db->prepare('COMMIT;');
-								$prepare->execute();
-							} else {
-								$status = false;
-								$error = 'Bill is not created';
-
-								$prepare = $db->prepare('ROLLBACK;');
-								$prepare->execute();
-							}
-
+							$prepare = $db->prepare('ROLLBACK;');
+							$prepare->execute();
 						}
-
 						
 					} catch (PDOException $e) {
 						$status = false;

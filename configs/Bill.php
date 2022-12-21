@@ -46,7 +46,37 @@ class Bill
 		return $c->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
 	}
 
-	public static function billNo($date = '')
+	public static function getAccountYear($date = '')
+	{
+		if (empty($date)) {
+			$date = Date('d-M-Y H:i:s');
+		}
+		
+		$dateTimestamp = strtotime($date);
+
+		if ($dateTimestamp > 0) {
+			
+			$currentYear = date('Y', $dateTimestamp);
+			$nextYear = date('Y', $dateTimestamp);
+			$timeString = self::$acc_Date . '-' . self::$acc_Month . '-' . $currentYear;
+
+			$acc = strtotime($timeString);
+			$now = $dateTimestamp;
+
+			if ($acc <= $now) {
+				$nextYear += 1;
+			} else {
+				$nextYear -= 1;
+			}
+
+			return $currentYear . '-' . $nextYear;
+
+		} else {
+			return null;
+		}
+	}
+
+	public static function billNo($date = '', $accountYear = '')
 	{
 		$db = new Db();
 		if (empty($date)) {
@@ -73,19 +103,34 @@ class Bill
 
 			$billCount = 0;
 
-			$sql = "SELECT IFNULL(COUNT(*),0) AS billCount FROM billentry WHERE billDate=:billDate AND delete_status=:delete_status AND billStatus!=:billStatus";
-			try {
-				$billDate = date('Y-m-d', $dateTimestamp);
+			$sql = "SELECT IFNULL(billNo,0) AS lastBillNo FROM billentry WHERE accountYear=:accountYear AND delete_status=:delete_status AND billStatus=:billStatus ORDER BY billNo DESC LIMIT 1";
+			
+			try {				
 				
 				$prepare = $db->prepare($sql);
-				$prepare->bindValue(':billDate', $billDate, PDO::PARAM_STR);
+				$prepare->bindValue(':accountYear', $accountYear, PDO::PARAM_STR);
 				$prepare->bindValue(':delete_status', false, PDO::PARAM_BOOL);
-				$prepare->bindValue(':billStatus', 'unsaved', PDO::PARAM_STR);
+				$prepare->bindValue(':billStatus', 'billed', PDO::PARAM_STR);
 				$result = $prepare->execute();
 
 				if ($result) {
-					$billCount = $prepare->fetchColumn() ?? 0;
-					$billCount++;
+					$lastBillNo = $prepare->fetchColumn() ?? 0;
+
+					if (empty($lastBillNo)) {
+						$billCount = 1;
+					} else {
+						$billCount = explode('-', $lastBillNo);
+						$billCount = $billCount[2] ?? null;
+
+						$billCount = intval($billCount) ?? null;
+
+						if (is_null($billCount)) {
+							return null;
+						}
+
+						$billCount++;
+					}
+					
 					$billCount = str_pad($billCount, 5, '0', STR_PAD_LEFT);
 				} else {
 					return null;
