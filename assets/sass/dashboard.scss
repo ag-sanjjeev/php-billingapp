@@ -7,23 +7,24 @@
 			min-height: 200px;
 			max-height: 250px;
 			height: 100%;
+			border-radius: 10px;
 		}
 
 	}
 
 	.price-history-graph-container {
-		.card {
-			min-height: 300px;
+		.card {			
 			max-height: 400px;
 			height: 100%;
+			border-radius: 10px;
 		}
 	}
 
 	.bills-history-graph-container {
 		.card {
-			min-height: 300px;
 			max-height: 400px;
 			height: 100%;
+			border-radius: 10px;
 		}
 	}
 }

@@ -11,9 +11,9 @@
 
 	<div class="col-md-3 my-3">
 		
-		<div class="card bg-success">
+		<div class="card carolina-blue-bg py-2 px-1">
 			
-			<p>test</p>
+			<canvas id="noOfProductsChart"></canvas>
 
 		</div>
 
@@ -21,9 +21,9 @@
 
 	<div class="col-md-3 my-3">
 		
-		<div class="card bg-warning">
+		<div class="card violet-blue-bg py-2 px-1">
 			
-			<p>test</p>
+			<canvas id="highlySold"></canvas>
 
 		</div>
 
@@ -31,9 +31,9 @@
 
 	<div class="col-md-3 my-3">
 		
-		<div class="card bg-danger">
+		<div class="card spanish-green-bg py-2 px-1">
 			
-			<p>test</p>
+			<canvas id="percentageProductSold"></canvas>
 
 		</div>
 
@@ -41,9 +41,9 @@
 
 	<div class="col-md-3 my-3">
 		
-		<div class="card bg-secondary">
-			
-			<p>test</p>
+		<div class="card flame-bg py-2 px-1">
+						
+			<canvas id="todayBills"></canvas>
 
 		</div>
 
@@ -64,8 +64,13 @@
 
 	<div class="col my-3">
 		
-		<div class="card bg-warning">
-			<p>test</p>
+		<div class="card carolina-blue-bg py-2 px-2">
+			
+			<select class="select2" id="productName">
+				<option value="">Top 10 Products</option>
+			</select>
+			<canvas id="productPriceHistory" class="pb-5"></canvas>
+
 		</div>
 
 	</div>
@@ -83,8 +88,8 @@
 
 	<div class="col my-3">
 		
-		<div class="card bg-warning">
-			<p>test</p>
+		<div class="card violet-blue-bg py-2 px-2">
+			<canvas id="billsHistory"></canvas>
 		</div>
 
 	</div>
@@ -94,3 +99,5 @@
 
 </div>
 <!-- @@@@@@@@@@@@@@@ /DASHBOARD @@@@@@@@@@@@@@@ -->
+<script type="text/javascript" src="./thirdparty/chartJs/chart.js" defer></script>
+<script type="text/javascript" src="./assets/js/dashboard.js" defer></script>
