@@ -951,7 +951,7 @@
 			try {
 				$prepare = $db->prepare($sql);						
 				
-				$prepare->bindValue(':delete_status', false, PDO::PARAM_INT);
+				$prepare->bindValue(':delete_status', false, PDO::PARAM_BOOL);
 
 				if (!empty($searchQuery)) {
 					$prepare->bindValue(':searchBillNo', "%$searchQuery%", PDO::PARAM_STR);
