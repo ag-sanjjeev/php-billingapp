@@ -55,10 +55,7 @@
 		</a>
 		<ul class="collapse list-unstyled" id="reportsPageMenu">
 			<li>
-				<a href="#">Page 1</a>
-			</li>
-			<li>
-				<a href="#">Page 1</a>
+				<a href="http://localhost/php-billingapp/pages/billreport/index.php">Bill Report</a>
 			</li>
 		</ul>
 
