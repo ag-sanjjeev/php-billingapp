@@ -27,10 +27,13 @@
 	
 	<!-- @@@@@@@@@@@@@@@ SIDEBAR @@@@@@@@@@@@@@@ -->
 
-	<aside class="py-2 active" id="sidebar">
+	<aside class="py-2" id="sidebar">
 		
 		<h4 class="sidebar-heading">
 			Explore Billing
+			<button type="button" class="btn btn-outline-primary p-1 py-0" id="navbarCloseBtn">
+				<i class="bi bi-x"></i>
+			</button>
 		</h4>		
 
 		<a href="#mastersPageMenu" class="dropdown-toggle" data-bs-toggle="collapse" aria-expanded="false">

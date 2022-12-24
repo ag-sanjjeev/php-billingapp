@@ -2,12 +2,11 @@
 @import 'variables';
 
 .wrapper aside#sidebar {
-	position: relative;
-	max-width: 250px;
-	/*max-height: 100vh;*/
-	width: 0;
-	height: auto;
-	/*height: 100vh;*/
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 0px;
 	
 	background-color: $selective-yellow !important;
 	color: white;
@@ -20,17 +19,22 @@
 	z-index: -1;
 	overflow-x: hidden;
 
-	transition: width 1.3s linear;
-
-	&.active {
-		width: 100%;
-		height: auto;
-		z-index: 10000;
-	}
+	transition: width 0.7s linear, z-index 1s linear;
 
 	.sidebar-heading {
-		color: var(--bs-primary);
+		width: 100%;						
+		display: flex;
+		justify-content: space-between;
+		padding: 5px 10px;	
+		color: var(--bs-primary);	
 	}
+
+	&.active {		
+		height: 100%;
+		width: 350px;
+		z-index: 10000;
+		box-shadow: 1px 2px 30px 5px $smoky-black;
+	}	
 
 	a {
 		text-decoration: none !important;

@@ -5,6 +5,7 @@
 @import 'dashboard';
 
 body {
+	position: relative;
 	width: 100%;
 }
 
@@ -14,9 +15,18 @@ body {
 	align-items: stretch !important;
 	min-height: 100vh;
 
-	/*main {
-		height: 100vh;
-	}*/
+	main {
+		pointer-events: auto;
+		/*width: 100% !important;*/
+		overflow-x: hidden;
+
+		transition: filter 0.7s linear;
+
+		&.blur {
+			pointer-events: none;
+			filter: sepia(5);					
+		}
+	}
 }
 
 .select2.select2-container {

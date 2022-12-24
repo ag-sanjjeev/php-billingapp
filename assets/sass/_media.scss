@@ -1,0 +1,50 @@
+@media (max-width: $sm-break-point) {
+  .wrapper aside#sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 0px;
+
+    background-color: $selective-yellow !important;
+    color: white;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    
+    z-index: -1;
+    overflow-x: hidden;
+
+    transition: width 0.7s linear, z-index 1s linear;
+
+    .sidebar-heading {
+      width: 100%;            
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 10px;  
+      color: var(--bs-primary); 
+    }
+
+    &.active {    
+      height: 100%;
+      width: 75%;
+      z-index: 10000;
+      box-shadow: 1px 2px 30px 5px $smoky-black;
+    } 
+
+  }
+}
+
+@media (max-width: $md-break-point) {
+
+}
+
+@media (max-width: $lg-break-point) {
+
+}
+
+@media (max-width: $xl-break-point) {
+
+}
